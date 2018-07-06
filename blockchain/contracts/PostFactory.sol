@@ -5,7 +5,7 @@ import "./Manageable.sol";
 contract PostFactory is Manageable {
     struct Post {
         uint weight;
-        uint publisherId;
+        address publisher;
     }
 
     Post[] public posts;
@@ -22,9 +22,9 @@ contract PostFactory is Manageable {
         post.weight = _weight;
     }
 
-    function setPublisherForPost(uint _postId, uint _publisherId) public {
+    function setPublisherForPost(uint _postId, address _publisher) public {
         require(_postId > 0);
         Post storage post = posts[_postId - 1];
-        post.publisherId = _publisherId;
+        post.publisher = _publisher;
     }
 }
