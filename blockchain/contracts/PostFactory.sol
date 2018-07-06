@@ -8,21 +8,23 @@ contract PostFactory is Manageable {
         uint publisherId;
     }
 
-    uint public nextPostId = 1;
-
-    // mapping post id to post
-    mapping (uint => Post) public posts;
+    Post[] public posts;
 
     function createPost(uint _weight) public {
-        uint postId = nextPostId++;
-        setWightForPost(postId, _weight);
+        Post memory post;
+        post.weight = _weight;
+        posts.push(post);
     }
 
     function setWightForPost(uint _postId, uint _weight) public {
-        posts[_postId].weight = _weight;
+        require(_postId > 0);
+        Post storage post = posts[_postId - 1];
+        post.weight = _weight;
     }
 
     function setPublisherForPost(uint _postId, uint _publisherId) public {
-        posts[_postId].publisherId = _publisherId;
+        require(_postId > 0);
+        Post storage post = posts[_postId - 1];
+        post.publisherId = _publisherId;
     }
 }
