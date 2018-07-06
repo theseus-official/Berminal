@@ -142,6 +142,7 @@ typings/
 .history
 package-lock.json
 .idea/*
+berminal.iml
 
 # API Doc
 server/doc
