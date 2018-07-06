@@ -23,7 +23,7 @@ async function test() {
     } else if (networkId == 5777) {
         // ganache
         const accounts = await web3.eth.getAccounts();
-        account = accounts[2];
+        account = accounts[1];
     }
 
     // web3.eth.defaultAccount = account;
@@ -58,196 +58,9 @@ async function test() {
     // await configAccessor.setExpForLevel(level, 123);
     // const exp = await configAccessor.getExpForLevel(level);
     // console.log('exp', exp.toNumber());
-
-    // const contractInfo = await extractContractInfo('blockchain/build/contracts/HeroManager.json');
-    // const heroManager = new web3.eth.Contract(
-    //     contractInfo['abi'],
-    //     contractInfo['address']
-    // );
-    // await heroManager.methods.createHero('dong', 0).send({from: account, gas: 6661234});
-
-    // const HeroManager = createTruffleContract('../build/contracts/HeroManager.json', account, 6661234)
-    // const heroManager = await HeroManager.deployed();
-    // await heroManager.createHero('dong', 0);
-
-    // const address = '0xc7fb696e1f1f7e13b0afda8aa0d5a0dd18aa4af2';
-    // console.log(await web3.eth.getStorageAt(address, 0));
-    // console.log(await web3.eth.getStorageAt(address, 1));
-    // console.log(await web3.eth.getStorageAt(address, 2));
-    // console.log(await web3.eth.getStorageAt(address, 3));
-
-    // const offset = web3.utils.soliditySha3(1, 2);
-    // console.log('offset', offset);
-    // console.log(await web3.eth.getStorageAt(address, offset));
-    // console.log(await web3.eth.getStorageAt(arrayAddress, 1));
-    // console.log(await web3.eth.getStorageAt(arrayAddress, 2));
-    // await testSetSwitcher(account, 1);
-
-    // await testSetOraclizeCallbackGasPrice(account, 20000000000);
-    // await testSetOraclizeCallbackGas(account, 200000);
-    // const oraclizeCallbackGasPrice = await contract.methods.oraclizeCallbackGasPrice().call()
-    // const oraclizeCallbackGas = await contract.methods.oraclizeCallbackGas().call();
-    // console.log('oraclizeCallbackGasPrice', oraclizeCallbackGasPrice, 'oraclizeCallbackGas', oraclizeCallbackGas)
-
-    // await testSetManager(account);
-    // await testGetPastEvents();
-    // await testWatchEvents();
-    // await testCreateHero(account, 'kkk', 1);
-    // await testChangeName(account, 0, 'koko');
-
-    // const libInfo = await extractContractInfo('blockchain/build/contracts/HeroStorageLib.json');
-    // lib = new web3.eth.Contract(
-    //     libInfo['abi'],
-    //     libInfo['address']
-    // );
-    // console.log('HeroStorageLib address', lib.options.address);
-    // const storageInfo = await extractContractInfo('blockchain/build/contracts/HeroStorage.json');
-    // const storageAddress = storageInfo['address'];
-
-    // console.log('age', await lib.methods.getAge().call());
-    // const name = await lib.methods.getName(storageAddress, 3).call();
-    // console.log('name', name);
-
-    // const wei = oraclizeCallbackGasPrice * oraclizeCallbackGas;
-    // console.log('wei', wei);
-    // await testObtainItem(account, 1, wei);
-
-    // await testRequestURL(account, 'json(http://api.fixer.io/latest?symbols=USD,GBP).rates');
-
-    // console.log(await testGetWarrior(1));
-    // console.log(await testGetWarrior(2));
-
-    // console.log(await testGetWarriorId(accounts[0]));
 }
 
-async function testSetManager(account) {
-    const storageInfo = await extractContractInfo('blockchain/build/contracts/HeroStorage.json');
-    const storage = new web3.eth.Contract(
-        storageInfo['abi'],
-        storageInfo['address']
-    );
 
-    const metadataInfo = await extractContractInfo('blockchain/build/contracts/HeroMetadata.json');
-    const metadata = new web3.eth.Contract(
-        metadataInfo['abi'],
-        metadataInfo['address']
-    );
-
-    const managerInfo = await extractContractInfo('blockchain/build/contracts/HeroManager.json');
-    const manager = new web3.eth.Contract(
-        managerInfo['abi'],
-        managerInfo['address']
-    );
-
-    const managerAddress = manager.options.address;
-    await storage.methods.setManager(managerAddress).send({
-        from: account,
-        gas: gasLimit
-    });
-    await metadata.methods.setManager(managerAddress).send({
-        from: account,
-        gas: gasLimit
-    });
-    await manager.methods.setMetadata(metadata.options.address).send({
-        from: account,
-        gas: gasLimit
-    });
-    await manager.methods.setModel(storage.options.address).send({
-        from: account,
-        gas: gasLimit
-    });
-}
-
-async function testCreateHero(account, name, gender) {
-    await contract.methods.createHero(name, gender).send({
-            from: account,
-            gas: gasLimit
-        });
-}
-
-async function testChangeName(account, index, name) {
-    await contract.methods.changeName(index, name).send({
-            from: account,
-            gas: gasLimit
-        });
-}
-
-// async function testRequestURL(account, url, gasLimit = 500000) {
-//     await contract.methods.requestURL(url, gasLimit).send({
-//             from: account,
-//             gas: gasLimit,
-//             value: web3.utils.toWei('40', 'milli')
-//         })
-//         .on('transactionHash', function (hash) {
-//             console.log('testRequestURL transactionHash', hash);
-//         })
-//         .on('confirmation', function (confirmationNumber, receipt) {
-//             console.log('testRequestURL confirmation', confirmationNumber);
-//         })
-//         .on('receipt', function (receipt) {
-//             console.log('testRequestURL receipt');
-//         })
-//         .on('error', console.error);
-// }
-
-async function testObtainItem(account, warriorId, wei) {
-    await contract.methods.obtainItem(warriorId).send({
-            from: account,
-            gas: gasLimit,
-            value: wei
-        })
-        .on('transactionHash', function (hash) {
-            console.log('testObtainItem transactionHash', hash);
-        })
-        .on('confirmation', function (confirmationNumber, receipt) {
-            console.log('testObtainItem confirmation', confirmationNumber);
-        })
-        .on('receipt', function (receipt) {
-            console.log('testObtainItem receipt');
-        })
-        .on('error', console.error);
-}
-
-async function testSetOraclizeCallbackGas(account, gas) {
-    await contract.methods.setOraclizeCallbackGas(gas).send({
-            from: account,
-            gas: gasLimit
-        }).on('transactionHash', function (hash) {
-            console.log('testSetOraclizeCallbackGas transactionHash', hash);
-        })
-        .on('receipt', function (receipt) {
-            console.log('testSetOraclizeCallbackGas receipt');
-        })
-        .on('error', console.error);
-}
-
-async function testSetOraclizeCallbackGasPrice(account, gasPrice) {
-    await contract.methods.setOraclizeCallbackGasPrice(gasPrice).send({
-            from: account,
-            gas: gasLimit
-        }).on('transactionHash', function (hash) {
-            console.log('testSetOraclizeCallbackGasPrice transactionHash', hash);
-        })
-        .on('receipt', function (receipt) {
-            console.log('testSetOraclizeCallbackGasPrice receipt');
-        })
-        .on('error', console.error);
-}
-
-async function testSetSwitcher(account, switcher) {
-    await contract.methods.setSwitcher(switcher).send({
-        from: account,
-        gas: gasLimit
-    });
-}
-
-async function testGetWarriorId(account) {
-    return await contract.methods.account2Warrior(account).call()
-}
-
-async function testGetWarrior(warriroId) {
-    return await contract.methods.warriors(warriroId - 1).call()
-}
 
 async function testGetPastEvents() {
     let events = await testGetPastEvent('LogHeroCreated');
@@ -255,24 +68,6 @@ async function testGetPastEvents() {
     for (event of events) {
         console.log(event.returnValues);
     }
-
-    // events = await testGetPastEvent('ItemObtained');
-    // console.log('--- ItemObtained --- ');
-    // for (event of events) {
-    //     console.log(event.returnValues);
-    // }
-
-    // events = await testGetPastEvent('Error');
-    // console.log('--- Error --- ');
-    // for (event of events) {
-    //     console.log(event.returnValues);
-    // }
-
-    // events = await testGetPastEvent('DebugInfo');
-    // console.log('--- DebugInfo --- ');
-    // for (event of events) {
-    //     console.log(event.returnValues);
-    // }
 }
 
 async function testWatchEvents() {
@@ -282,24 +77,6 @@ async function testWatchEvents() {
             console.log("Watch Event LogHeroCreated", info.id, info.name, info.gender);
         })
         .on("error", console.error);
-    // await contract.events.ItemObtained()
-    //     .on("data", function (event) {
-    //         const info = event.returnValues;
-    //         console.log("... ItemObtained warriorId:", info.warriorId, "itemId:", info.itemId, "level:", info.level, "part:", info.part, "quality:", info.quality, "power:", info.power, "basePower:", info.basePower);
-    //     })
-    //     .on("error", console.error);
-    // await contract.events.Error()
-    //     .on("data", function (event) {
-    //         const info = event.returnValues;
-    //         console.log("... Error warriorId:", info.warriorId, info.code, info.description);
-    //     })
-    //     .on("error", console.error);
-    // await contract.events.DebugInfo()
-    //     .on("data", function (event) {
-    //         const info = event.returnValues;
-    //         console.log("... DebugInfo:", info.text, info.value1, info.value2);
-    //     })
-    //     .on("error", console.error);
 }
 
 async function testGetPastEvent(name) {
