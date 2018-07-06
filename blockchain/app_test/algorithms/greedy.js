@@ -96,7 +96,7 @@ function _findMax(combinations, posts, snodes) {
             t = com;
         }
     }
-    console.log("Final combination: ", t);
+    console.log("Posts snode index: ", t);
     return max;
 }
 
