@@ -8,7 +8,9 @@ let clear = require('clear'),
             type: 'input',
             message: 'Press ENTER to vote for next round:',
         }
-    ];
+    ],
+    lib = require('./lib'),
+    run_voting = lib.run_voting;
 
 clear();
 
@@ -104,47 +106,14 @@ function matching_keys(dic, value) {
     return result;
 }
 
-/**
- * Shuffles array in place. ES6 version
- * @param {Array} a items An array containing the items.
- */
-function shuffle(a) {
-    for (let i = a.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [a[i], a[j]] = [a[j], a[i]];
-    }
-    return a;
-}
-
-function detailed_ballots(ballots) {
-    let result = [];
-
-    for (let groups of ballots) {
-        for (let i = 0; i < groups['count']; ++i) {
-            result.push(groups['ballot']);
-        }
-    }
-
-    result = shuffle(result);
-
-    let index = 1;
-
-    for (let ballot of result) {
-        console.log(chalk.inverse(('0' + index).slice(-2)) + ' ', ballot.join(', '));
-        index++;
-    }
-
-    console.log();
-}
-
 async function single_transferable_vote(ballots, required_winners = 2) {
     console.log(chalk.blue.bold('Welcome to Voting Section of Berminal!\n'));
     console.log(chalk.underline('We use Single Transferable Vote algorithm.\n'));
-    console.log(chalk.cyan('Suppose a food election is conducted to determine' +
-        '\nwhat three foods to serve at a party. There are 5 candidates, 3 of ' +
-        '\nwhich will be chosen. The candidates are: Oranges, Pears, Chocolate,' +
-        '\nStrawberries, and Sweets. The 20 guests vote as the following:\n'));
-    detailed_ballots(ballots);
+    console.log(chalk.cyan('There are 5 candidates, 3 of ' +
+        '\nwhich will be chosen. The candidates are: BBC, HBO, CNN,' +
+        '\nFOX, and CBS. The following are the ballots:\n'));
+    // pretty_print_ballot(detailed_ballots(ballots));
+    await run_voting(ballots);
 
     let candidates = new Set();
 
@@ -254,7 +223,7 @@ async function single_transferable_vote(ballots, required_winners = 2) {
     data['remaining_candidates'] = remaining_candidates;
     data['winners'] = winners;
 
-    console.log(chalk.green('The election is complete and the elected candidates are: (',
+    console.log(chalk.green('The election is complete and the elected candidates are: (' +
         [...winners].join(', ') + ')\n\n'));
 
     return data;
