@@ -1,3 +1,31 @@
+let clear = require('clear'),
+    figlet = require('figlet'),
+    chalk = require('chalk'),
+    inquirer = require('inquirer'),
+    question = [
+        {
+            name: 'Next round',
+            type: 'input',
+            message: 'Press ENTER to vote for next round:',
+        }
+    ];
+
+clear();
+
+console.log(
+    chalk.yellow(
+        figlet.textSync('Berminal', {horizontalLayout: 'full'})
+    )
+);
+
+function set_toJSON(key, value) {
+    if (typeof value === 'object' && value instanceof Set) {
+        return [...value];
+    }
+
+    return value;
+}
+
 function droop_quota(ballots, seats = 1) {
     let voters = 0;
 
@@ -30,14 +58,6 @@ function tallies(ballots) {
     });
 
     return tallies_dic;
-
-    let result = {};
-
-    for (let candidate in tallies_dic) {
-        result[candidate] = tallies_dic[candidate];
-    }
-
-    return result;
 }
 
 function remove_candidates_from_ballots(candidates, ballots) {
@@ -71,7 +91,6 @@ function loser(tallies) {
 }
 
 function break_ties(arr) {
-    // TODO: implement break_tie
     return arr[0];
 }
 
@@ -85,7 +104,7 @@ function matching_keys(dic, value) {
     return result;
 }
 
-function single_transferable_vote(ballots, required_winners = 1) {
+async function single_transferable_vote(ballots, required_winners = 2) {
     let candidates = new Set();
 
     ballots.forEach(ballot => {
@@ -110,8 +129,8 @@ function single_transferable_vote(ballots, required_winners = 1) {
 
     while (winners.size < required_winners &&
     remaining_candidates.size + winners.size !== required_winners) {
-        console.log('\n\n============================================\n');
-        console.log('Round ', round_cnt, ' votes');
+        await inquirer.prompt(question);
+        console.log(chalk.red('\nRound ', round_cnt, ' votes'));
         round_cnt++;
 
         if (!remaining_candidates) {
@@ -148,7 +167,7 @@ function single_transferable_vote(ballots, required_winners = 1) {
                 msg += '" has exceeded the quota and is elected. ' +
                     '\nIf there are seats remaining to be filled, ' +
                     'the \nsurplus will now be reallocated.';
-                console.log(msg);
+                console.log(chalk.yellow(msg));
 
                 winners = set_union(winners, round['winners']);
                 remaining_candidates = set_diff(remaining_candidates, winners);
@@ -171,8 +190,8 @@ function single_transferable_vote(ballots, required_winners = 1) {
 
                 if (round['loser']) {
                     let msg = round['loser'];
-                    msg = `"${msg}"` + ' is loser and it will be removed.';
-                    console.log(msg);
+                    msg = '\n' + `"${msg}"` + ' is loser and it will be removed.';
+                    console.log(chalk.yellow(msg));
                 }
 
                 remaining_candidates = set_diff(remaining_candidates, new Set([round['loser']]));
@@ -180,6 +199,7 @@ function single_transferable_vote(ballots, required_winners = 1) {
             }
         }
 
+        console.log('\n' + JSON.stringify(round, set_toJSON, 2));
         rounds.push(round);
         console.log('\n');
     }
@@ -193,10 +213,8 @@ function single_transferable_vote(ballots, required_winners = 1) {
     data['remaining_candidates'] = remaining_candidates;
     data['winners'] = winners;
 
-    console.log('The election is complete and the elected candidates are: (',
-        [...winners].join(', ') + ')');
-    console.log('\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n' +
-        '~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n\n');
+    console.log(chalk.green('The election is complete and the elected candidates are: (',
+        [...winners].join(', ') + ')\n\n'));
 
     return data;
 }
@@ -213,3 +231,4 @@ function set_union(a, b) {
 }
 
 exports.single_transferable_vote = single_transferable_vote;
+exports.set_toJSON = set_toJSON;
