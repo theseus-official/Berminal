@@ -91,16 +91,34 @@ function _findMax(combinations, posts, snodes) {
     for(let com of combinations) {
         let _max = _calValue(com, posts, snodes);
         if(_max > max) {
-            console.log('max: ', _max);
+            // console.log('max: ', _max);
             max = _max;
             t = com;
         }
     }
-    console.log("Posts snode index: ", t);
+
+    for (let i = 0; i < t.length; i++) {
+        const post = posts[i];
+        const snode = snodes[t[i] - 1];
+        console.log('Publish', post.title, 'by super node', snode.name, 'bandwidth', snode.bandw, 'rating', snode.rateData[post.title], );
+    }
+    console.log('The total rating of posts =', max);
+    // console.log("Posts snode index: ", t);
     return max;
 }
 
 function bestComb (posts, snodes) {
+    console.log('\n');
+    // const postNames = posts.map( post => post.title);
+    let str = '[ ';
+    for (const post of posts) {
+        str += post.title;
+        str += ', ';
+    }
+    str = str.slice(0, -2);
+    str += ' ]';
+    console.log('Post candidates:', str);
+
     let num = _allCombinations(posts, snodes);
     let res = _findMax(num, posts, snodes);
     return res;
