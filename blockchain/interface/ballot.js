@@ -1,8 +1,8 @@
 const
     Web3 = require("Web3"),
     web3 = new Web3(new Web3.providers.HttpProvider('HTTP://127.0.0.1:7545')),
-    gasBase = 430000,
-    gasPrice = '22000000000';// to wei
+    gasBase = 6500000,
+    gasPrice = '220000';// to wei
 
 
 const createContract = (name) => {
@@ -45,13 +45,16 @@ exports.addSuperNodes = async (addresses, bandwidths) => {
 };
 
 exports.voting = async (address, superNodeIds) => {
-    const sender = await exports.manager();
     await ballot.methods.voting(superNodeIds).send({
-        from: sender,
+        from: address,
         gas: gasBase,
         gasPrice: gasPrice
     })
 };
+
+exports.isVoted = async (address) => {
+    return await ballot.methods.isVoted(address).call();
+}
 
 exports.getSuperNodeCount = async () => {
     return await ballot.methods.getSuperNodeCount().call();

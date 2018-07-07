@@ -58,7 +58,11 @@ contract Ballot {
     function getVoteInfoById(uint _id) external view returns (uint[]) {
         uint[] memory voteInfo = new uint[](superNodeId - 1);
         for (uint i = 0; i < superNodeId - 1; i++) {
-            voteInfo[i] = idToVoteInfo[_id][i];
+            if (i < idToVoteInfo[_id].length) {
+                voteInfo[i] = idToVoteInfo[_id][i];
+            } else {
+                break;
+            }
         }
         return voteInfo;
     }
@@ -66,7 +70,11 @@ contract Ballot {
     function getVoteInfoByAddress(address _address) external view returns (uint[]) {
         uint[] memory voteInfo = new uint[](superNodeId - 1);
         for (uint i = 0; i < superNodeId - 1; i++) {
-            voteInfo[i] = addressToVoteInfo[_address][i];
+            if (i < addressToVoteInfo[_address].length) {
+                voteInfo[i] = addressToVoteInfo[_address][i];
+            } else {
+                break;
+            }
         }
         return voteInfo;
     }
