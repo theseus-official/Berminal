@@ -13,6 +13,7 @@ function set_candidates(account_ids) {
             sub_accounts.push(accounts[x]);
             bandwidths.push(1024 * 1024 * 1024);
         });
+
         ballot.addSuperNodes(sub_accounts, bandwidths).then(() => {
             console.log('successful add a list of super nodes');
             ballot.getSuperNodeCount().then(console.log)
@@ -49,10 +50,10 @@ function vote_candidates(account_id, candidates) {
 // });
 
 // set_candidates([2, 3, 4]);
-// vote_candidates(10, [2]);
+// vote_candidates(5, [2, 3, 4]);
 
 // ballot.getVoteInfoById(1).then(console.log);
 
 ballot.getVoteCount().then(console.log);
-ballot.getVoteInfoById(1).then(console.log);
+// ballot.getVoteInfoById(1).then(console.log);
 

@@ -1,15 +1,7 @@
 let stv = require('./stv').single_transferable_vote;
 
-function set_toJSON(key, value) {
-    if (typeof value === 'object' && value instanceof Set) {
-        return [...value];
-    }
-    return value;
-}
-
 function test_input(input, seats) {
-    let output = stv(input, seats);
-    console.log(JSON.stringify(output, set_toJSON, 2));
+    stv(input, seats);
 }
 
 function test_stv_landslide() {
@@ -42,6 +34,10 @@ function test_stv_wiki_example() {
     test_input(input, 3);
 }
 
-test_stv_landslide();
-test_stv_everyone_wins();
-test_stv_wiki_example();
+async function main() {
+    // await test_stv_landslide();
+    // await test_stv_everyone_wins();
+    await test_stv_wiki_example();
+}
+
+main();
