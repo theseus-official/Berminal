@@ -3,14 +3,40 @@ const provider = new Web3.providers.WebsocketProvider('ws://127.0.0.1:7545'); //
 // const provider = new Web3.providers.WebsocketProvider('ws://127.0.0.1:8546') // geth
 // const provider = new Web3.providers.WebsocketProvider('wss://rinkeby.infura.io/ws')
 
-const web3 = new Web3(provider); 
+const web3 = new Web3(provider);
+// console.log(web3);
 
 const TruffleContract = require('truffle-contract');
 
-test();
+// const postData = require('./algorithms/postData.json');
+// const {Post, Snode, bestComb} = require('./algorithms/greedy');
 
+// let Posts = postData.Posts.map(i => {return new Post(i)});
+// let SNodes = postData.Snodes.map(i => {return new Snode(i)});
+
+// const value = bestComb(Posts.slice(0, 1), SNodes);
+// console.log('sum of posts =', value);
+
+// console.log('waiting for input');
+// const stdin = process.openStdin();
+// stdin.addListener("data", input => {
+//     const str = input.toString().trim();
+//     console.log("you entered: [" + str + "]");
+// });
+// const readline = require('readline');
+// const rl = readline.createInterface({
+//     input: process.stdin,
+//     output: process.stdout
+// });
+// rl.question('Enter your name ', (answer) => {
+//     console.log('Hi', answer);
+//     //   rl.close();
+// });
+// console.log('end of input');
+
+
+// test();
 async function test() {
-    console.log(web3);
     const networkId = await web3.eth.net.getId();
     const gasPrice = await web3.eth.getGasPrice();
     console.log('version:', web3.version, 'networkID:', networkId, 'gasPrice:', gasPrice);
@@ -127,14 +153,17 @@ function createTruffleContract(jsonFilePath, account, gas) {
     const Contract = TruffleContract(json);
     Contract.setProvider(provider);
     fixTruffleContractCompatibilityIssue(Contract);
-    Contract.defaults({from: account, gas: gas});
+    Contract.defaults({
+        from: account,
+        gas: gas
+    });
     return Contract;
 }
 // Workaround for a compatibility issue between web3@1.0.0-beta.29 and truffle-contract@3.0.3
 // https://github.com/trufflesuite/truffle-contract/issues/57#issuecomment-331300494
 function fixTruffleContractCompatibilityIssue(contract) {
     if (typeof contract.currentProvider.sendAsync !== "function") {
-        contract.currentProvider.sendAsync = function() {
+        contract.currentProvider.sendAsync = function () {
             return contract.currentProvider.send.apply(
                 contract.currentProvider, arguments
             );
