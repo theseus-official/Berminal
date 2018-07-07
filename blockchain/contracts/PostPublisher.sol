@@ -4,25 +4,26 @@ import "./Manageable.sol";
 
 contract PostPublisher is Manageable {
     uint public id;
+    string public name;
     uint public bandwidth;
 
-    // post id => rating score
-    mapping (uint => uint) public ratings;
+    // post key => rating score
+    mapping (bytes32 => uint) public ratings;
 
     // posts that will be published
-    uint[] public postIds;
+    bytes32[] public postKeys;
 
-    constructor (uint _id, uint _bandwidth) public {
+    constructor (uint _id, string _name, uint _bandwidth) public {
         id = _id;
+        name = _name;
         bandwidth = _bandwidth;
     }
 
-    function setRatingForPost(uint _postId, uint _rating) public {
-        require(_postId > 0);
-        ratings[_postId] = _rating;
+    function setRatingForPost(bytes32 _postKey, uint _rating) public {
+        ratings[_postKey] = _rating;
     }
 
-    function setPostsToPublish(uint[] _postIds) public {
-        postIds = _postIds;
+    function setPostsToPublish(bytes32[] _postKeys) public {
+        postKeys = _postKeys;
     }
 }

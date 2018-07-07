@@ -11,6 +11,7 @@ function Post(title) {
 }
 
 function Snode(info) {
+    this.id = info.id;
     this.name = info.name;
     this.bandw = info.bandw;
     this.rateData = info.rateData;
@@ -117,7 +118,7 @@ function bestComb (posts, snodes) {
     }
     str = str.slice(0, -2);
     str += ' ]';
-    console.log('Post candidates:', str);
+    console.log('Posts to assign:', str);
 
     let num = _allCombinations(posts, snodes);
     let res = _findMax(num, posts, snodes);
