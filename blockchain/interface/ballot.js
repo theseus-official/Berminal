@@ -45,7 +45,7 @@ exports.addSuperNodes = async (addresses, bandwidths) => {
 };
 
 exports.voting = async (address, superNodeIds) => {
-    await ballot.methods.voting(superNodeIds).send({
+    return await ballot.methods.voting(superNodeIds).send({
         from: address,
         gas: gasBase,
         gasPrice: gasPrice
@@ -54,7 +54,7 @@ exports.voting = async (address, superNodeIds) => {
 
 exports.isVoted = async (address) => {
     return await ballot.methods.isVoted(address).call();
-}
+};
 
 exports.getSuperNodeCount = async () => {
     return await ballot.methods.getSuperNodeCount().call();
