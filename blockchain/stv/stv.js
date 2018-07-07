@@ -14,16 +14,22 @@ function tallies(ballots) {
     let tallies_dic = {};
 
     ballots.forEach(ballot => {
-        ballot['ballot'].forEach(candidate => {
-            tallies_dic[candidate] = 0;
-        });
+        if (ballot['ballot']) {
+            ballot['ballot'].forEach(candidate => {
+                tallies_dic[candidate] = 0;
+            });
+        }
     });
 
     ballots.forEach(ballot => {
         if (ballot['ballot']) {
-            tallies_dic[ballot['ballot'][0]] += ballot['count'];
+            if (ballot['ballot'].length > 0) {
+                tallies_dic[ballot['ballot'][0]] += ballot['count'];
+            }
         }
     });
+
+    return tallies_dic;
 
     let result = {};
 
@@ -98,10 +104,16 @@ function single_transferable_vote(ballots, required_winners = 1) {
     let quota = droop_quota(ballots, required_winners),
         rounds = [],
         winners = new Set(),
-        remaining_candidates = set_diff(candidates, winners);
+        remaining_candidates = set_diff(candidates, winners),
+        data = {'candidates': candidates},
+        round_cnt = 1;
 
     while (winners.size < required_winners &&
     remaining_candidates.size + winners.size !== required_winners) {
+        console.log('\n\n============================================\n');
+        console.log('Round ', round_cnt, ' votes');
+        round_cnt++;
+
         if (!remaining_candidates) {
             remaining_candidates = set_diff(candidates, winners);
         }
@@ -132,7 +144,14 @@ function single_transferable_vote(ballots, required_winners = 1) {
                     }
                 }
 
+                let msg = '\n"' + [...round['winners']].join(', ');
+                msg += '" has exceeded the quota and is elected. ' +
+                    '\nIf there are seats remaining to be filled, ' +
+                    'the \nsurplus will now be reallocated.';
+                console.log(msg);
+
                 winners = set_union(winners, round['winners']);
+                remaining_candidates = set_diff(remaining_candidates, winners);
 
                 ballots.forEach(ballot => {
                     if (ballot['ballot']) {
@@ -149,19 +168,37 @@ function single_transferable_vote(ballots, required_winners = 1) {
             }
             else {
                 round['loser'] = loser(round['tallies'])['loser'];
-                remaining_candidates = set_diff(remaining_candidates, round['loser']);
+
+                if (round['loser']) {
+                    let msg = round['loser'];
+                    msg = `"${msg}"` + ' is loser and it will be removed.';
+                    console.log(msg);
+                }
+
+                remaining_candidates = set_diff(remaining_candidates, new Set([round['loser']]));
                 ballots = remove_candidates_from_ballots([round['loser']], ballots);
             }
         }
 
-        rounds.push(round)
+        rounds.push(round);
+        console.log('\n');
     }
 
-    if (winners.length < required_winners) {
+    if (winners.size < required_winners) {
         winners = set_union(winners, remaining_candidates);
     }
 
-    console.log('winners = ', winners);
+    data['quota'] = quota;
+    data['rounds'] = rounds;
+    data['remaining_candidates'] = remaining_candidates;
+    data['winners'] = winners;
+
+    console.log('The election is complete and the elected candidates are: (',
+        [...winners].join(', ') + ')');
+    console.log('\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n' +
+        '~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n\n');
+
+    return data;
 }
 
 function set_diff(a, b) {
@@ -174,3 +211,5 @@ function set_diff(a, b) {
 function set_union(a, b) {
     return new Set([...a, ...b]);
 }
+
+exports.single_transferable_vote = single_transferable_vote;
