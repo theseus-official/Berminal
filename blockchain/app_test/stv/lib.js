@@ -1,4 +1,4 @@
-let ballot = require('../blockchain/interface/ballot'),
+let ballot = require('../../../blockchain/interface/ballot'),
     chalk = require('chalk');
 
 /**
