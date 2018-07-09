@@ -18,8 +18,8 @@ console.log(
     )
 );
 
-const postData = require('./algorithms/postData.json');
-const {Post, Snode, bestComb} = require('./algorithms/greedy');
+const postData = require('./postData.json');
+const {Post, Snode, bestComb} = require('./greedy');
 
 let Posts = postData.Posts.map(i => {return new Post(i)});
 let SNodes = postData.Snodes.map(i => {return new Snode(i)});
@@ -53,7 +53,7 @@ async function test() {
     const balance = await web3.eth.getBalance(account);
     console.log('account:', account, 'balance:', balance, 'Wei', web3.utils.fromWei(balance), 'ETH');
 
-    const PostPublisher = createTruffleContract('../build/contracts/PostPublisher.json', account, 2000000)
+    const PostPublisher = createTruffleContract('../../build/contracts/PostPublisher.json', account, 2000000)
     
     // console.log('All Super Nodes:');
     for (const snode of SNodes) {

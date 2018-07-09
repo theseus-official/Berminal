@@ -8,41 +8,24 @@ const web3 = new Web3(provider);
 
 const TruffleContract = require('truffle-contract');
 
-const postData = require('./algorithms/postData.json');
-const {Post, Snode, bestComb} = require('./algorithms/greedy');
 
-let Posts = postData.Posts.map(i => {return new Post(i)});
-let SNodes = postData.Snodes.map(i => {return new Snode(i)});
-
-console.log('All Super Nodes:');
-for (const snode of SNodes) {
-    console.log('Snode', snode.name, 'bandwidth', snode.bandw, snode.rateData);
+function buildList(list) {
+    var result = [];
+    for (var i = 0; i < list.length; i++) {
+        var item = 'item' + i;
+        result.push( function() {console.log(item + ' ' + list[i])} );
+    }
+    return result;
 }
 
-bestComb(Posts.slice(0, 1), SNodes);
-bestComb(Posts.slice(0, 2), SNodes);
-bestComb(Posts.slice(0, 3), SNodes);
-bestComb(Posts.slice(0, 4), SNodes);
+function testList() {
+    var fnlist = buildList([1,2,3]);
+    for (var j = 0; j < fnlist.length; j++) {
+        fnlist[j]();
+    }
+}
 
-// console.log('waiting for input');
-// const stdin = process.openStdin();
-// stdin.addListener("data", input => {
-//     const str = input.toString().trim();
-//     console.log("you entered: [" + str + "]");
-//     if (str >= 1 && str <= 4) {
-//         bestComb(Posts.slice(0, str), SNodes);
-//     }
-// });
-// const readline = require('readline');
-// const rl = readline.createInterface({
-//     input: process.stdin,
-//     output: process.stdout
-// });
-// rl.question('Enter your name ', (answer) => {
-//     console.log('Hi', answer);
-//     //   rl.close();
-// });
-// console.log('end of input');
+ testList() //logs "item2 undefined" 3 times
 
 
 // test();
