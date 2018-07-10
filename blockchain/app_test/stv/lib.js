@@ -25,17 +25,6 @@ function detailed_ballots(ballots) {
     return shuffle(result);
 }
 
-function pretty_print_ballot(result) {
-    let index = 1;
-
-    for (let ballot of result) {
-        console.log(chalk.inverse(('0' + index).slice(-2)) + ' ', ballot.join(', '));
-        index++;
-    }
-
-    console.log();
-}
-
 function candidate_names_ids(input) {
     let ballots = detailed_ballots(input),
         ids = [],
@@ -101,6 +90,12 @@ function candidate_name_id_dic(input) {
     return candidate_name_id;
 }
 
+function join_candidates_name(input) {
+    let candidate_name_id = candidate_name_id_dic(input);
+
+    return Object.keys(candidate_name_id).join(', ');
+}
+
 /**
  * set superNodes as candidates
  *
@@ -129,12 +124,13 @@ function set_candidates(account_ids) {
  */
 async function vote_candidates(account_id, candidates) {
     let accounts = await ballot.accounts(),
-        transaction = await ballot.voting(accounts[account_id], candidates),
-        hash = transaction.transactionHash;
+        transaction = await ballot.voting(accounts[account_id], candidates);
 
-    return hash;
+    return transaction.transactionHash;
 }
 
 exports.candidate_names_ids = candidate_names_ids;
 exports.run_set_candidates = run_set_candidates;
 exports.run_voting = run_voting;
+exports.join_candidates_name = join_candidates_name;
+exports.candidate_name_id_dic = candidate_name_id_dic;

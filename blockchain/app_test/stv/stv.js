@@ -107,12 +107,16 @@ function matching_keys(dic, value) {
 }
 
 async function single_transferable_vote(ballots, required_winners = 2) {
+    let candidate_size = Object.keys(lib.candidate_name_id_dic(ballots)).length;
+
     console.log(chalk.blue.bold('Welcome to Voting Section of Berminal!\n'));
     console.log(chalk.underline('We use Single Transferable Vote algorithm.\n'));
-    console.log(chalk.cyan(`There are 5 candidates, ${required_winners} of ` +
-        '\nwhich will be chosen. The candidates are: BBC, HBO, CNN,' +
-        '\nFOX, and CBS. The following are the ballots:\n'));
-    // pretty_print_ballot(detailed_ballots(ballots));
+    console.log(chalk.cyan(
+        `There are ${candidate_size} candidates, ${required_winners} of ` +
+        'which will be chosen.\nThe candidates are: ' +
+        lib.join_candidates_name(ballots) +
+        '.\nThe following are the ballots:\n'));
+
     await run_voting(ballots);
 
     let candidates = new Set();
