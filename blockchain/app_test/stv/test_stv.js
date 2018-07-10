@@ -25,10 +25,11 @@ function test_stv_everyone_wins() {
 }
 
 function test_stv_wiki_example() {
-    let input = fs.readFileSync(path.join(__dirname, 'ballots_input.json'));
-    input = JSON.parse(input);
+    let input = JSON.parse(fs.readFileSync(path.join(__dirname, 'ballots_input.json'))),
+        ballots = input['ballots'],
+        seats = input['seats'];
 
-    test_input(input, 3);
+    test_input(ballots, seats);
 }
 
 
