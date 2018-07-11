@@ -32,28 +32,21 @@ async function test() {
     const Counter = createTruffleContract('../build/contracts/Counter.json', account)
     const counter = await Counter.deployed();
 
-    let count = await counter.getCount();
-    console.log('count', count.toNumber());
+    let senderCount = await counter.getSenderCount();
+    console.log('senderCount', senderCount.toNumber());
 
-    // console.log('increase');
+    let totalCount = await counter.getTotalCount();
+    console.log('totalCount', totalCount.toNumber());
+
     // counter.increase();
-    // console.log('increase');
     // counter.increase();
-    // console.log('increase');
     // counter.increase();
 
-    // count = await counter.getCount();
-    // console.log('count', count.toNumber());
+    // senderCount = await counter.getSenderCount();
+    // console.log('senderCount', senderCount.toNumber());
 
-    // await counter.increase();
-
-    // count = await counter.getCount();
-    // console.log('count', count.toNumber());
-
-    // await counter.increase();
-
-    // count = await counter.getCount();
-    // console.log('count', count.toNumber());
+    // totalCount = await counter.getTotalCount();
+    // console.log('totalCount', totalCount.toNumber());
 
     // const contractInfo = await extractContractInfo('blockchain/build/contracts/HeroAccessorExt.json');
     // const heroAccessorExt = new web3.eth.Contract(
