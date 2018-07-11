@@ -1,6 +1,6 @@
 const Ballot = artifacts.require("Ballot");
 
-contract('ConfigAccessor', async (accounts) => {
+contract('Ballot', async (accounts) => {
     let ballot;
     it('set up', async () => {
         ballot = await Ballot.deployed();

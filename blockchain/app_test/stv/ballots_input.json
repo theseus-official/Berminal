@@ -1,0 +1,45 @@
+{
+  "seats": 3,
+  "ballots": [
+    {
+      "count": 4,
+      "ballot": [
+        "BBC"
+      ]
+    },
+    {
+      "count": 2,
+      "ballot": [
+        "HBO",
+        "BBC"
+      ]
+    },
+    {
+      "count": 8,
+      "ballot": [
+        "CNN",
+        "FOX"
+      ]
+    },
+    {
+      "count": 4,
+      "ballot": [
+        "CNN",
+        "CBS"
+      ]
+    },
+    {
+      "count": 1,
+      "ballot": [
+        "FOX"
+      ]
+    },
+    {
+      "count": 1,
+      "ballot": [
+        "CBS"
+      ]
+    }
+  ]
+}
+

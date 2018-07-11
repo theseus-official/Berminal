@@ -1,6 +1,7 @@
 {
     "Posts": ["P1", "P2", "P3", "P4", "P5"],
     "Snodes": [{
+        "id": 1,
         "name": "n1",
         "bandw": 5,
         "rateData": {
@@ -11,6 +12,7 @@
             "P5": 5
         }
     }, {
+        "id": 2,
         "name": "n2",
         "bandw": 15,
         "rateData": {
@@ -21,6 +23,7 @@
             "P5": 3
         }
     }, {
+        "id": 3,
         "name": "n3",
         "bandw": 20,
         "rateData": {
