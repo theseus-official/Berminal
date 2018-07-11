@@ -35,22 +35,15 @@ async function test() {
     let count = await counter.getCount();
     console.log('count', count.toNumber());
 
-    counter.increase().then(transaction => {
-        console.log(transaction);
-        counter.getCount().then(count => {console.log(count.toNumber())})
-    });
-    // await counter.increase();
+    // console.log('increase');
+    // counter.increase();
+    // console.log('increase');
+    // counter.increase();
+    // console.log('increase');
+    // counter.increase();
 
-    counter.increase().then(transaction => {
-        console.log(transaction);
-        counter.getCount().then(count => {console.log(count.toNumber())})
-    });
-
-    counter.increase().then(transaction => {
-        console.log(transaction);
-        counter.getCount().then(count => {console.log(count.toNumber())})
-    });
-    
+    // count = await counter.getCount();
+    // console.log('count', count.toNumber());
 
     // await counter.increase();
 

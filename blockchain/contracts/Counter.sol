@@ -1,13 +1,19 @@
 pragma solidity 0.4.24;
 
 contract Counter {
-    uint count = 0;
+    uint totalCount;
+    mapping(address => uint) senderCount;
 
     function increase() external {
-        count++;
+        senderCount[msg.sender]++;
+        totalCount++;
     }
 
-    function getCount() external view returns (uint) {
-        return count;
+    function getSenderCount() external view returns (uint) {
+        return senderCount[msg.sender];
+    }
+
+    function getTotalCount() external view returns (uint) {
+        return totalCount;
     }
 }
