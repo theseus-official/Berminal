@@ -2,20 +2,35 @@ const PostPublisher = artifacts.require("PostPublisher");
 
 contract('PostPublisher', async (accounts) => {
     it("game presettings", async () => {
-        const publisher1 = await PostPublisher.new(1, 10);
-        let publisherId = await publisher1.id();
-        assert.equal(publisherId.toNumber(), 1);
-        let bandwidth = await publisher1.bandwidth();
-        assert.equal(bandwidth.toNumber(), 10);
+        const publisher = await PostPublisher.deployed();
+        let snid = 1;
+        await publisher.setSuperNodeName(snid, 'n1');
+        await publisher.setSuperNodeBandwidth(snid, 5);
+        await publisher.setSuperNodePostRating(snid, 'P1', 10);
+        await publisher.setSuperNodePostRating(snid, 'P2', 6);
+        await publisher.setSuperNodePostRating(snid, 'P3', 9);
+        await publisher.setSuperNodePostRating(snid, 'P4', 4);
+        await publisher.setSuperNodePostRating(snid, 'P5', 5);
 
-        let postId = 1;
-        await publisher1.setRatingForPost(postId, 4);
-        let rating = await publisher1.ratings(postId);
+        const name = await publisher.getSuperNodeName(snid);
+        assert.equal(name, 'n1');
+
+        const bandwidth = await publisher.getSuperNodeBandwidth(snid);
+        assert.equal(bandwidth.toNumber(), 5);
+
+        let rating = await publisher.getSuperNodePostRating(snid, 'P1');
+        assert.equal(rating.toNumber(), 10);
+
+        rating = await publisher.getSuperNodePostRating(snid, 'P2');
+        assert.equal(rating.toNumber(), 6);
+
+        rating = await publisher.getSuperNodePostRating(snid, 'P3');
+        assert.equal(rating.toNumber(), 9);
+
+        rating = await publisher.getSuperNodePostRating(snid, 'P4');
         assert.equal(rating.toNumber(), 4);
 
-        postId = 2;
-        await publisher1.setRatingForPost(postId, 6);
-        rating = await publisher1.ratings(postId);
-        assert.equal(rating.toNumber(), 6);
+        rating = await publisher.getSuperNodePostRating(snid, 'P5');
+        assert.equal(rating.toNumber(), 5);
     });
 });

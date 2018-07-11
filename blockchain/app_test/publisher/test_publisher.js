@@ -48,23 +48,25 @@ async function test() {
     } else if (networkId == 5777) {
         // ganache
         const accounts = await web3.eth.getAccounts();
-        account = accounts[1];
+        account = accounts[0];
     }
     const balance = await web3.eth.getBalance(account);
     console.log('account:', account, 'balance:', balance, 'Wei', web3.utils.fromWei(balance), 'ETH');
 
     const PostPublisher = createTruffleContract('../../build/contracts/PostPublisher.json', account, 2000000)
-    
-    // console.log('All Super Nodes:');
+    const publisher = await PostPublisher.deployed();
+    console.log('\nPostPublisher is deployed at address:', publisher.address);
+
+    console.log('Config Super Nodes:');
     for (const snode of SNodes) {
-        const publisher = await PostPublisher.new(snode.id, snode.name, snode.bandw);
-        console.log('\nCreate Super Node at address:', publisher.address);
+        const snid = snode.id;
+        await publisher.setSuperNodeName(snid, snode.name);
+        await publisher.setSuperNodeBandwidth(snid, snode.bandw);
         for (const key in snode.rateData) {
             const value = snode.rateData[key];
-            console.log('Contract: set rating for post', key, value);
-            await publisher.setRatingForPost(key, value);
+            await publisher.setSuperNodePostRating(snid, key, value);
         }
-        console.log('Super Node:', snode.name, 'bandwidth', snode.bandw, 'ratings:', snode.rateData);
+        console.log(snode.name, 'bandwidth', snode.bandw, 'ratings:', snode.rateData);
     }
 
     await inquirer.prompt(question);
