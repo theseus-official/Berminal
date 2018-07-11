@@ -1,6 +1,6 @@
 const Web3 = require('web3');
-const provider = new Web3.providers.WebsocketProvider('ws://127.0.0.1:7545'); // ganache
-// const provider = new Web3.providers.WebsocketProvider('ws://127.0.0.1:8546') // geth
+// const provider = new Web3.providers.WebsocketProvider('ws://127.0.0.1:7545'); // ganache
+const provider = new Web3.providers.WebsocketProvider('ws://127.0.0.1:8546') // geth
 // const provider = new Web3.providers.WebsocketProvider('wss://rinkeby.infura.io/ws')
 
 const web3 = new Web3(provider);
@@ -8,27 +8,7 @@ const web3 = new Web3(provider);
 
 const TruffleContract = require('truffle-contract');
 
-
-function buildList(list) {
-    var result = [];
-    for (var i = 0; i < list.length; i++) {
-        var item = 'item' + i;
-        result.push( function() {console.log(item + ' ' + list[i])} );
-    }
-    return result;
-}
-
-function testList() {
-    var fnlist = buildList([1,2,3]);
-    for (var j = 0; j < fnlist.length; j++) {
-        fnlist[j]();
-    }
-}
-
- testList() //logs "item2 undefined" 3 times
-
-
-// test();
+test();
 async function test() {
     const networkId = await web3.eth.net.getId();
     const gasPrice = await web3.eth.getGasPrice();
@@ -48,6 +28,39 @@ async function test() {
     // web3.eth.defaultAccount = account;
     const balance = await web3.eth.getBalance(account);
     console.log('account:', account, 'balance:', balance, 'Wei', web3.utils.fromWei(balance), 'ETH');
+
+    const Counter = createTruffleContract('../build/contracts/Counter.json', account)
+    const counter = await Counter.deployed();
+
+    let count = await counter.getCount();
+    console.log('count', count.toNumber());
+
+    counter.increase().then(transaction => {
+        console.log(transaction);
+        counter.getCount().then(count => {console.log(count.toNumber())})
+    });
+    // await counter.increase();
+
+    counter.increase().then(transaction => {
+        console.log(transaction);
+        counter.getCount().then(count => {console.log(count.toNumber())})
+    });
+
+    counter.increase().then(transaction => {
+        console.log(transaction);
+        counter.getCount().then(count => {console.log(count.toNumber())})
+    });
+    
+
+    // await counter.increase();
+
+    // count = await counter.getCount();
+    // console.log('count', count.toNumber());
+
+    // await counter.increase();
+
+    // count = await counter.getCount();
+    // console.log('count', count.toNumber());
 
     // const contractInfo = await extractContractInfo('blockchain/build/contracts/HeroAccessorExt.json');
     // const heroAccessorExt = new web3.eth.Contract(
@@ -71,12 +84,6 @@ async function test() {
     // await configAccessor.methods.setExpForLevel(level, 678).send({from: account, gas: 200000});
     // const exp = await configAccessor.methods.getExpForLevel(level).call();
     // console.log('exp', exp);
-
-    // const ConfigAccessor = createTruffleContract('../build/contracts/ConfigAccessor.json', account)
-    // const configAccessor = await ConfigAccessor.deployed();
-    // await configAccessor.setExpForLevel(level, 123);
-    // const exp = await configAccessor.getExpForLevel(level);
-    // console.log('exp', exp.toNumber());
 }
 
 
