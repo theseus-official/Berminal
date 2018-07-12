@@ -1,10 +1,9 @@
 const Web3 = require('web3');
 // const provider = new Web3.providers.WebsocketProvider('ws://127.0.0.1:7545'); // ganache
-const provider = new Web3.providers.WebsocketProvider('ws://127.0.0.1:8546') // geth
+const provider = new Web3.providers.WebsocketProvider('ws://127.0.0.1:8546'); // geth
 // const provider = new Web3.providers.WebsocketProvider('wss://rinkeby.infura.io/ws')
-
 const web3 = new Web3(provider);
-// console.log(web3);
+console.log(web3);
 
 const TruffleContract = require('truffle-contract');
 
@@ -17,8 +16,10 @@ async function test() {
     if (networkId == 4) {
         // rinkeby
         account = '0x55d95463A92f270c5b5980A69C5fA0B3767Af12E';
-        const privateKey = '0x932fdcd8c48678f2c6d9fd0a9d69d308d810dfc6a1d8afaa642486dac91dc96a';
-        web3.eth.accounts.wallet.add(privateKey);
+        // const privateKey = '0x932fdcd8c48678f2c6d9fd0a9d69d308d810dfc6a1d8afaa642486dac91dc96a';
+        // web3.eth.accounts.wallet.add(privateKey);
+        // console.log('func', web3.eth.personal.unlockAccount);
+        // web3.eth.personal.unlockAccount(account, 'dong123');
     } else if (networkId == 5777) {
         // ganache
         const accounts = await web3.eth.getAccounts();
@@ -27,7 +28,7 @@ async function test() {
 
     // web3.eth.defaultAccount = account;
     const balance = await web3.eth.getBalance(account);
-    console.log('account:', account, 'balance:', balance, 'Wei', web3.utils.fromWei(balance), 'ETH');
+    console.log(`account: ${account} balance: ${web3.utils.fromWei(balance)} ETH`);
 
     const Counter = createTruffleContract('../build/contracts/Counter.json', account)
     const counter = await Counter.deployed();
@@ -38,9 +39,10 @@ async function test() {
     let totalCount = await counter.getTotalCount();
     console.log('totalCount', totalCount.toNumber());
 
-    // counter.increase();
-    // counter.increase();
-    // counter.increase();
+    for (let i = 0; i < 1; i++) {
+        // await counter.increase();
+    }
+    console.log('end');
 
     // senderCount = await counter.getSenderCount();
     // console.log('senderCount', senderCount.toNumber());
