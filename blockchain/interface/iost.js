@@ -111,3 +111,4 @@ const token = () => {
 };
 
 exports.token = token();
+exports.web3 = web3;
