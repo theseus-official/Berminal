@@ -16,10 +16,6 @@ async function test() {
     if (networkId == 4) {
         // rinkeby
         account = '0x55d95463A92f270c5b5980A69C5fA0B3767Af12E';
-        // const privateKey = '0x932fdcd8c48678f2c6d9fd0a9d69d308d810dfc6a1d8afaa642486dac91dc96a';
-        // web3.eth.accounts.wallet.add(privateKey);
-        // console.log('func', web3.eth.personal.unlockAccount);
-        // web3.eth.personal.unlockAccount(account, 'dong123');
     } else if (networkId == 5777) {
         // ganache
         const accounts = await web3.eth.getAccounts();
@@ -74,8 +70,6 @@ async function test() {
     // console.log('exp', exp);
 }
 
-
-
 async function testGetPastEvents() {
     let events = await testGetPastEvent('LogHeroCreated');
     console.log('Past Event LogHeroCreated');
@@ -111,29 +105,6 @@ async function extractContractInfo(file) {
         'abi': abi,
         'address': address
     }
-}
-
-function getPrivateKey(account = '0x55d95463a92f270c5b5980a69c5fa0b3767af12e', password = 'dong123') {
-    const keythereum = require("keythereum");
-    const datadir = "/Users/dark/Library/Ethereum/rinkeby";
-
-    const keyObject = keythereum.importFromFile(account, datadir);
-    const privateKey = keythereum.recover(password, keyObject);
-    return '0x' + privateKey.toString('hex');
-}
-
-function hex2Text(hexString) {
-    if (hexString.startsWith('0x') || hexString.startsWith('0X')) {
-        hexString = hexString.substring(2);
-    }
-    let text = '';
-    for (let i = 0; i < hexString.length - 1; i += 2) {
-        const byte = hexString.substring(i, (i + 2));
-        const charCode = parseInt(byte, 16);
-        const char = String.fromCharCode(charCode);
-        text += char;
-    }
-    return text;
 }
 
 function createTruffleContract(jsonFilePath, account, gas) {
